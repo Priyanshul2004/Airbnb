@@ -1,25 +1,440 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-    <h1 class="col-6 offset-3">LogIn</h1>
-    <div class="col-6 offset-3">
-        <form action="/login" method="post">
-            <div class="mb-3">
-                <lable for="username" class="form-label">username</lable>
-                <input name="username" id="username" type="text" class="form-control" required />
-            
-              </div>
+<style>
+  .login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    padding: 20px;
+  }
 
-              
+  .login-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  }
 
-              <div class="mb-3">
-                <lable for="password" class="form-label">Password</lable>
-                <input name="password" id="password" type="password" class="form-control" required />
-              </div>
+  .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
 
-              <button class="btn btn-success">LogIn</button>
+  .login-logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-        </form>
+  .login-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
 
-     </div>
- </div>
+  .login-subtitle {
+    color: #94a3b8;
+    font-size: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-light);
+    font-size: 0.95rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+  }
+
+  .form-control::placeholder {
+    color: #64748b;
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  .btn-login:hover {
+    background: linear-gradient(135deg, #0891b2, #3b82f6);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+  }
+
+  .btn-login:active {
+    transform: translateY(0);
+  }
+
+  .signup-link {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.95rem;
+  }
+
+  .signup-link a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .signup-link a:hover {
+    color: var(--primary-light);
+    text-decoration: underline;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .divider span {
+    padding: 0 15px;
+  }
+
+  .social-login {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .btn-social {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    text-decoration: none;
+    text-align: center;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-social:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    text-decoration: none;
+  }
+
+  .error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  .success-message {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #86efac;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  .forgot-password {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+
+  .forgot-password a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+  }
+
+  .forgot-password a:hover {
+    color: var(--primary-light);
+    text-decoration: underline;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .login-container {
+      padding: 15px;
+    }
+
+    .login-card {
+      padding: 30px 25px;
+      max-width: 100%;
+    }
+
+    .login-logo {
+      font-size: 2rem;
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+    }
+
+    .social-login {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .login-card {
+      padding: 25px 20px;
+    }
+
+    .form-control {
+      padding: 12px 15px;
+    }
+
+    .btn-login {
+      padding: 12px;
+    }
+  }
+</style>
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">🏠 UrbanNest</div>
+      <h1 class="login-title">Welcome Back</h1>
+      <p class="login-subtitle">Sign in to your account</p>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (typeof error !== 'undefined' && error.length > 0) { %>
+      <div class="error-message">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <% if (typeof success !== 'undefined' && success.length > 0) { %>
+      <div class="success-message">
+        <%= success %>
+      </div>
+    <% } %>
+
+    <form action="/login" method="post" id="loginForm">
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          placeholder="Enter your email"
+          required
+          value="admin@airbnb.com"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="role" class="form-label">Role</label>
+        <select id="role" name="role" class="form-control" required>
+          <option value="">Select your role</option>
+          <option value="user" selected>Regular User</option>
+          <option value="admin">Admin</option>
+          <option value="super_admin">Super Admin</option>
+          <option value="moderator">Moderator</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          placeholder="Enter your password"
+          required
+          value="admin123"
+        >
+      </div>
+
+      <div class="forgot-password">
+        <a href="#">Forgot your password?</a>
+      </div>
+
+      <button type="submit" class="btn-login">
+        Sign In
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <div class="social-login">
+      <a href="#" class="btn-social">
+        <span>📧</span>
+        <span>Google</span>
+      </a>
+      <a href="#" class="btn-social">
+        <span>📘</span>
+        <span>Facebook</span>
+      </a>
+    </div>
+
+    <div class="signup-link">
+      Don't have an account? 
+      <a href="/signup">Sign up here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎯 === UNIFIED LOGIN PAGE LOADED ===');
+  console.log('📅 Page load timestamp:', new Date().toISOString());
+  console.log('🌐 Current URL:', window.location.href);
+  
+  const form = document.getElementById('loginForm');
+  const emailInput = document.getElementById('email');
+  const roleInput = document.getElementById('role');
+  const passwordInput = document.getElementById('password');
+
+  console.log('📋 Form elements found:');
+  console.log('   Form:', form ? '✅ Found' : '❌ Not found');
+  console.log('   Email Input:', emailInput ? '✅ Found' : '❌ Not found');
+  console.log('   Role Input:', roleInput ? '✅ Found' : '❌ Not found');
+  console.log('   Password Input:', passwordInput ? '✅ Found' : '❌ Not found');
+
+  // Input validation styling
+  [emailInput, roleInput, passwordInput].forEach(input => {
+    if (input) {
+      input.addEventListener('input', function() {
+        if (this.value.length > 0) {
+          this.style.borderColor = '#22c55e';
+        } else {
+          this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        }
+      });
+    }
+  });
+
+  // Form submission validation
+  form.addEventListener('submit', function(e) {
+    console.log('🔍 === LOGIN FORM SUBMISSION ===');
+    
+    const email = emailInput.value.trim();
+    const role = roleInput.value;
+    const password = passwordInput.value;
+
+    console.log('📋 Form data:', {
+      email: email,
+      role: role,
+      password: password ? '[HIDDEN]' : 'undefined'
+    });
+
+    console.log('📤 Form will submit to:', form.action);
+    console.log('📤 Form method:', form.method);
+
+    if (!email) {
+      e.preventDefault();
+      console.error('❌ Email validation failed');
+      alert('Please enter your email.');
+      emailInput.focus();
+      return;
+    }
+
+    if (!role) {
+      e.preventDefault();
+      console.error('❌ Role validation failed');
+      alert('Please select your role.');
+      roleInput.focus();
+      return;
+    }
+
+    if (!password) {
+      e.preventDefault();
+      console.error('❌ Password validation failed');
+      alert('Please enter your password.');
+      passwordInput.focus();
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      e.preventDefault();
+      console.error('❌ Email format validation failed');
+      alert('Please enter a valid email address.');
+      emailInput.focus();
+      return;
+    }
+
+    console.log('✅ Form validation passed');
+  });
+
+  // Add loading state to submit button
+  form.addEventListener('submit', function() {
+    const submitBtn = document.querySelector('.btn-login');
+    if (submitBtn) {
+      submitBtn.innerHTML = 'Signing In...';
+      submitBtn.disabled = true;
+    }
+  });
+
+  console.log('🎉 === UNIFIED LOGIN PAGE INITIALIZED ===');
+});
+</script>

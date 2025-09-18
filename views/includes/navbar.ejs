@@ -1,54 +1,333 @@
 <style>
-  .search-btn{
-    background-color: #fe424d;
-    color: #fff;
+  .navbar {
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+    padding: 1rem 0;
+  }
+  
+  .navbar-brand {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-color) !important;
+    text-decoration: none;
+  }
+  
+  .navbar-brand:hover {
+    color: var(--primary-light) !important;
+  }
+  
+  .nav-link {
+    color: var(--text-light) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin: 0 0.25rem;
+  }
+  
+  .nav-link:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--primary-light) !important;
+  }
+  
+  .search-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    min-width: 200px;
   }
-  .search-btn:hover {
-    background-color: #fe424d;
-    color: #fff;
+  
+  .search-container:focus-within {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary-light);
   }
-  .search-btn i {
-    display: inline;
-    margin-right: 0.5rem;
-  }
+  
   .search-inp {
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 0.8rem;
+    background: transparent;
+    border: none;
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    width: 100%;
+    min-width: 150px;
+  }
+  
+  .search-inp::placeholder {
+    color: #94a3b8;
+  }
+  
+  .search-inp:focus {
+    outline: none;
+  }
+  
+  .search-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+  
+  .search-btn:hover {
+    background: #0891b2;
+    transform: translateY(-1px);
+  }
+  
+  .navbar-toggler {
+    border: none;
+    color: var(--text-light);
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: none;
+  }
+  
+  .user-menu {
+    position: relative;
+  }
+  
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .user-avatar:hover {
+    background: var(--accent-color);
+    transform: scale(1.05);
+  }
+  
+  .dropdown-menu {
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow-dark);
+  }
+  
+  .dropdown-item {
+    color: var(--text-light);
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .dropdown-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--primary-light);
+  }
+  
+  .btn-primary-nav {
+    background: linear-gradient(135deg, var(--primary-light), var(--accent-color));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .btn-primary-nav:hover {
+    background: linear-gradient(135deg, var(--primary-color), #f59e0b);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    color: white;
+    text-decoration: none;
+  }
+
+  .btn-login-nav {
+    background: transparent;
+    color: var(--text-light);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 10px;
+  }
+  
+  .btn-login-nav:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  
+  .btn-outline-nav {
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-nav:hover {
+    background: var(--primary-light);
+    color: white;
+    border-color: var(--primary-light);
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .search-container {
+      min-width: 150px;
+      margin: 0.5rem 0;
+    }
+    
+    .search-inp {
+      min-width: 100px;
+    }
+    
+    .search-btn span {
+      display: none;
+    }
+    
+    .search-btn {
+      padding: 0.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navbar-nav {
+      margin-top: 1rem;
+    }
+    
+    .search-container {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+    
+    .navbar-nav .nav-link {
+      padding: 0.75rem 1rem;
+      margin: 0.25rem 0;
+    }
+    
+    .user-menu {
+      margin-top: 0.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .navbar-brand {
+      font-size: 1.5rem;
+    }
+    
+    .search-container {
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.75rem;
+    }
+    
+    .search-inp {
+      width: 100%;
+      text-align: center;
+    }
+    
+    .search-btn {
+      width: 100%;
+      justify-content: center;
+    }
   }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/homepage-logout">
+        <i class="fas fa-home"></i>
+        <span style="margin-left: 8px;">UrbanNest</span>
+      </a>
+      
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <i class="fas fa-bars"></i>
       </button>
+      
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          
+        <div class="navbar-nav me-auto">
+          <a class="nav-link" href="/homepage-logout">Home</a>
           <a class="nav-link" href="/listings">Explore</a>
-          
-        </div>
-       <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations" >
-          <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-        </form>
-       </div>
-
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/listings/new">Airbnb your home</a> 
-          <% if(!currUser){ %>
-          <a class="nav-link "  href="/signup"><b>Sign up</b></a>
-          <a class="nav-link" href="/login"><b>Log in</b></a>
+          <% if(currUser && currUser.userType === 'admin'){ %>
+            <a class="nav-link" href="/listings/new">Host Your Home</a>
           <% } %>
+        </div>
+        
+        <div class="navbar-nav">
+          <% if (typeof page !== 'undefined' && page !== 'home') { %>
+          <div class="search-container me-3">
+            <i class="fas fa-search" style="color: #94a3b8; margin-left: 0.5rem;"></i>
+            <input class="search-inp" type="search" placeholder="Search destinations">
+            <button class="search-btn" type="submit">
+              <span>Search</span>
+            </button>
+          </div>
+          <% } %>
+          
+          <% if(!currUser){ %>
+            <a class="btn-login-nav" href="/login">
+              <i class="fas fa-sign-in-alt"></i>
+              Log in
+            </a>
+            <a class="btn-primary-nav" href="/signup">
+              <i class="fas fa-user-plus"></i>
+              Sign up
+            </a>
+          <% } %>
+          
           <% if(currUser){ %>
-          <a class="nav-link" href="/logout"><b>Log out</b></a> 
+            <div class="user-menu dropdown">
+              <div class="user-avatar dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <%= currUser.username.charAt(0).toUpperCase() %>
+              </div>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <% if(currUser.userType === 'admin'){ %>
+                  <!-- Admin Menu Items -->
+                  <li><a class="dropdown-item" href="/admin/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a></li>
+                  <li><a class="dropdown-item" href="/admin/listings"><i class="fas fa-home me-2"></i>Manage Listings</a></li>
+                  <li><a class="dropdown-item" href="/admin/users"><i class="fas fa-users me-2"></i>Manage Users</a></li>
+                  <li><a class="dropdown-item" href="/admin/profile"><i class="fas fa-user me-2"></i>Admin Profile</a></li>
+                <% } else { %>
+                  <!-- Regular User Menu Items -->
+                  <li><a class="dropdown-item" href="/user/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                  <li><a class="dropdown-item" href="/user/bookings"><i class="fas fa-calendar-check me-2"></i>My Bookings</a></li>
+                  <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                <% } %>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Log out</a></li>
+              </ul>
+            </div>
           <% } %>
         </div>
       </div>
     </div>
-  </nav>
+</nav>

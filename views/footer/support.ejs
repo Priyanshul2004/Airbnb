@@ -1,0 +1,144 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="support-header text-center mb-5">
+                <h1 class="display-4 fw-bold text-light mb-3">
+                    <i class="fas fa-headset me-3"></i>Support Center
+                </h1>
+                <p class="lead text-muted">
+                    We're here to help you with any questions or concerns you may have.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="support-card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="support-icon mb-3">
+                                <i class="fas fa-question-circle fa-3x text-primary"></i>
+                            </div>
+                            <h4 class="card-title text-light">Help Center</h4>
+                            <p class="card-text text-muted">
+                                Find answers to frequently asked questions and get help with your bookings.
+                            </p>
+                            <a href="#" class="btn btn-primary">Visit Help Center</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="support-card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="support-icon mb-3">
+                                <i class="fas fa-shield-alt fa-3x text-success"></i>
+                            </div>
+                            <h4 class="card-title text-light">Safety</h4>
+                            <p class="card-text text-muted">
+                                Learn about our safety measures and how we protect our community.
+                            </p>
+                            <a href="#" class="btn btn-success">Safety Guidelines</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="support-card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="support-icon mb-3">
+                                <i class="fas fa-undo fa-3x text-warning"></i>
+                            </div>
+                            <h4 class="card-title text-light">Cancellation</h4>
+                            <p class="card-text text-muted">
+                                Understand our cancellation policies and how to modify your bookings.
+                            </p>
+                            <a href="#" class="btn btn-warning">Cancellation Policy</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="support-card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="support-icon mb-3">
+                                <i class="fas fa-universal-access fa-3x text-info"></i>
+                            </div>
+                            <h4 class="card-title text-light">Accessibility</h4>
+                            <p class="card-text text-muted">
+                                Information about accessibility features and accommodations.
+                            </p>
+                            <a href="#" class="btn btn-info">Accessibility Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-section mt-5 text-center">
+                <h3 class="text-light mb-3">Still Need Help?</h3>
+                <p class="text-muted mb-4">Contact our support team directly</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                            <h5 class="text-light">Email Support</h5>
+                            <p class="text-muted">support@urbannest.com</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="contact-method">
+                            <i class="fas fa-phone fa-2x text-success mb-2"></i>
+                            <h5 class="text-light">Phone Support</h5>
+                            <p class="text-muted">+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="contact-method">
+                            <i class="fas fa-comments fa-2x text-info mb-2"></i>
+                            <h5 class="text-light">Live Chat</h5>
+                            <p class="text-muted">Available 24/7</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .support-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .support-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border-color: var(--primary-light);
+    }
+
+    .support-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .support-card:hover .support-icon {
+        transform: scale(1.1);
+    }
+
+    .contact-method {
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .contact-method:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+    }
+</style>
+

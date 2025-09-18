@@ -1,0 +1,526 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  .admin-container {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg-dark);
+  }
+
+  /* Hide footer in admin dashboard */
+  footer {
+    display: none !important;
+  }
+
+  /* Sidebar Styles */
+  .admin-sidebar {
+    width: 280px;
+    background: var(--primary-color);
+    padding: 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  .sidebar-header {
+    padding: 30px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar-header h3 {
+    color: var(--text-light);
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar-menu li {
+    margin: 0;
+  }
+
+  .sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .sidebar-menu a:hover,
+  .sidebar-menu li.active a {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    border-left-color: var(--accent-color);
+  }
+
+  .sidebar-menu i {
+    width: 20px;
+    text-align: center;
+  }
+
+  /* Main Content */
+  .admin-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 30px;
+  }
+
+  .page-header {
+    margin-bottom: 30px;
+  }
+
+  .page-title {
+    color: var(--text-light);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+  }
+
+  .page-subtitle {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  /* Listings Grid */
+  .listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .listing-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .listing-card:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .listing-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .listing-content {
+    padding: 20px;
+  }
+
+  .listing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+
+  .listing-title {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .listing-price {
+    color: var(--accent-color);
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(6, 182, 212, 0.3);
+  }
+
+  .listing-details {
+    margin-bottom: 15px;
+  }
+
+  .listing-detail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  .listing-detail i {
+    width: 16px;
+    color: var(--accent-color);
+  }
+
+  .listing-owner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.05));
+    border-radius: 10px;
+    border: 1px solid rgba(6, 182, 212, 0.2);
+  }
+
+  .owner-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .owner-info {
+    flex: 1;
+  }
+
+  .owner-name {
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .owner-email {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    margin: 2px 0 0 0;
+  }
+
+  .listing-date {
+    color: #64748b;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .listing-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-action {
+    flex: 1;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-view {
+    background: #3b82f6;
+    color: white;
+    border: 1px solid #3b82f6;
+  }
+
+  .btn-view:hover {
+    background: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-edit {
+    background: #f59e0b;
+    color: white;
+    border: 1px solid #f59e0b;
+  }
+
+  .btn-edit:hover {
+    background: #d97706;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+  }
+
+  .empty-state i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+  }
+
+  .empty-state h3 {
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+
+  .empty-state p {
+    margin-bottom: 30px;
+  }
+
+  .btn-add-listing {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--accent-color), #0891b2);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-add-listing:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.3);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .admin-sidebar {
+      width: 100%;
+      position: relative;
+      height: auto;
+    }
+
+    .admin-main {
+      margin-left: 0;
+      padding: 20px;
+    }
+
+    .listings-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="admin-container">
+  <!-- Admin Sidebar -->
+  <nav class="admin-sidebar">
+    <div class="sidebar-header">
+      <h3><i class="fas fa-crown"></i> Admin Panel</h3>
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <a href="/admin/dashboard">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="/admin/listings">
+          <i class="fas fa-home"></i>
+          <span>Manage Listings</span>
+        </a>
+      </li>
+      <li>
+        <a href="/listings/new">
+          <i class="fas fa-plus"></i>
+          <span>Add New Listing</span>
+        </a>
+      </li>
+      <li>
+        <a href="/admin/users">
+          <i class="fas fa-users"></i>
+          <span>Users</span>
+        </a>
+      </li>
+      <li>
+        <a href="/admin/profile">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <div class="page-header">
+      <h1 class="page-title">Manage Listings</h1>
+      <p class="page-subtitle">View and manage all property listings</p>
+    </div>
+
+    <% if (listings && listings.length > 0) { %>
+      <div class="listings-grid">
+        <% listings.forEach(listing => { %>
+          <div class="listing-card">
+            <img src="<%= listing.image ? listing.image.url : 'https://via.placeholder.com/400x200' %>" 
+                 alt="<%= listing.title %>" class="listing-image">
+            <div class="listing-content">
+              <div class="listing-header">
+                <h3 class="listing-title"><%= listing.title %></h3>
+                <span class="listing-price">$<%= listing.price %></span>
+              </div>
+              
+              <div class="listing-details">
+                <div class="listing-detail">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span><%= listing.location %>, <%= listing.country %></span>
+                </div>
+                <div class="listing-detail">
+                  <i class="fas fa-bed"></i>
+                  <span><%= listing.bedrooms %> Bedrooms</span>
+                </div>
+                <div class="listing-detail">
+                  <i class="fas fa-bath"></i>
+                  <span><%= listing.bathrooms %> Bathrooms</span>
+                </div>
+                <div class="listing-detail">
+                  <i class="fas fa-users"></i>
+                  <span>Up to <%= listing.maxGuests %> Guests</span>
+                </div>
+              </div>
+
+              <div class="listing-owner">
+                <div class="owner-avatar">
+                  <%= listing.owner ? listing.owner.username.charAt(0).toUpperCase() : 'U' %>
+                </div>
+                <div class="owner-info">
+                  <p class="owner-name"><%= listing.owner ? listing.owner.username : 'Unknown User' %></p>
+                  <p class="owner-email"><%= listing.owner ? listing.owner.email : 'No email' %></p>
+                </div>
+              </div>
+
+              <div class="listing-date">
+                Created: <%= listing.createdAt ? listing.createdAt.toLocaleDateString() : 'Unknown' %>
+              </div>
+
+              <div class="listing-actions">
+                <a href="/listings/<%= listing._id %>" class="btn-action btn-view" target="_blank">
+                  <i class="fas fa-eye"></i>
+                  View
+                </a>
+                <a href="/admin/listings/<%= listing._id %>/edit" class="btn-action btn-edit">
+                  <i class="fas fa-edit"></i>
+                  Edit
+                </a>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <i class="fas fa-home"></i>
+        <h3>No Listings Found</h3>
+        <p>There are no property listings to display at the moment.</p>
+        <a href="/listings/new" class="btn-add-listing">
+          <i class="fas fa-plus"></i> Add First Listing
+        </a>
+      </div>
+    <% } %>
+  </main>
+</div>
+
+<script>
+  console.log('🔍 === ADMIN LISTINGS PAGE LOADED ===');
+  
+  // Function to fetch listings via API
+  async function fetchListings() {
+    try {
+      console.log('📡 Fetching listings from API...');
+      const response = await fetch('/admin/api/listings');
+      const data = await response.json();
+      
+      if (data.success) {
+        console.log(`✅ Successfully fetched ${data.count} listings`);
+        console.log('📋 Listings data:', data.data);
+        return data.data;
+      } else {
+        console.error('❌ API Error:', data.message);
+        return [];
+      }
+    } catch (error) {
+      console.error('❌ Network Error:', error);
+      return [];
+    }
+  }
+
+  // Function to refresh listings
+  async function refreshListings() {
+    console.log('🔄 Refreshing listings...');
+    const listings = await fetchListings();
+    
+    if (listings.length > 0) {
+      console.log('✅ Listings refreshed successfully');
+      // You can add logic here to update the UI if needed
+    } else {
+      console.log('ℹ️ No listings found');
+    }
+  }
+
+  // Add refresh button functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎉 Admin listings page initialized');
+    
+    // Add refresh button to page header
+    const pageHeader = document.querySelector('.page-header');
+    if (pageHeader) {
+      const refreshBtn = document.createElement('button');
+      refreshBtn.className = 'btn-refresh';
+      refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+      refreshBtn.onclick = refreshListings;
+      pageHeader.appendChild(refreshBtn);
+    }
+  });
+</script>
+
+<style>
+  .btn-refresh {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .btn-refresh:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+</style>

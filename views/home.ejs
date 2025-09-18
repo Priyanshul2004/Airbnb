@@ -1,0 +1,841 @@
+<% layout("/layouts/boilerplate") %>
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Find Your Perfect Stay</h1>
+        <p class="hero-subtitle">Discover amazing places to stay around the world. From cozy apartments to luxury villas, find your ideal accommodation.</p>
+        <div class="hero-search">
+          <div class="search-container">
+            <div class="search-input-group">
+              <i class="fas fa-map-marker-alt"></i>
+              <input type="text" placeholder="Where are you going?" class="search-input">
+            </div>
+            <div class="search-input-group">
+              <i class="fas fa-calendar-alt"></i>
+              <input type="date" class="search-input">
+            </div>
+            <div class="search-input-group">
+              <i class="fas fa-users"></i>
+              <select class="search-input">
+                <option>Guests</option>
+                <option>1 Guest</option>
+                <option>2 Guests</option>
+                <option>3 Guests</option>
+                <option>4+ Guests</option>
+              </select>
+            </div>
+            <button class="search-btn">
+              <i class="fas fa-search"></i>
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Why Choose Us?</h2>
+        <p>Experience the best in hospitality and accommodation</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-home"></i>
+          </div>
+          <h3>Amazing Places</h3>
+          <p>Discover unique and beautiful accommodations around the world, from city apartments to beachfront villas.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Safe & Secure</h3>
+          <p>Your safety is our priority. All listings are verified and our platform ensures secure transactions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h3>24/7 Support</h3>
+          <p>Our dedicated support team is available around the clock to help you with any questions or concerns.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <h3>Top Rated</h3>
+          <p>Join thousands of satisfied guests who have rated our accommodations with 5-star reviews.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Destinations -->
+  <section class="destinations-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Popular Destinations</h2>
+        <p>Explore the most sought-after locations</p>
+      </div>
+      <div class="destinations-grid">
+        <div class="destination-card">
+          <div class="destination-image">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Mountain View">
+            <div class="destination-overlay">
+              <h3>Mountain Retreats</h3>
+              <p>Escape to the mountains</p>
+            </div>
+          </div>
+        </div>
+        <div class="destination-card">
+          <div class="destination-image">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80" alt="Beach View">
+            <div class="destination-overlay">
+              <h3>Beach Paradise</h3>
+              <p>Relax by the ocean</p>
+            </div>
+          </div>
+        </div>
+        <div class="destination-card">
+          <div class="destination-image">
+            <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="City View">
+            <div class="destination-overlay">
+              <h3>Urban Adventures</h3>
+              <p>Explore vibrant cities</p>
+            </div>
+          </div>
+        </div>
+        <div class="destination-card">
+          <div class="destination-image">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Countryside">
+            <div class="destination-overlay">
+              <h3>Countryside</h3>
+              <p>Peaceful rural escapes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Listings -->
+  <section class="listings-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Listings</h2>
+        <p>Discover our most popular accommodations</p>
+      </div>
+      <div class="listings-grid">
+        <% if (allListings && allListings.length > 0) { %>
+          <% allListings.slice(0, 6).forEach(listing => { %>
+            <div class="listing-card">
+              <div class="listing-image">
+                <img src="<%= listing.image ? listing.image.url : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' %>" alt="<%= listing.title %>">
+                <div class="listing-badge">Featured</div>
+              </div>
+              <div class="listing-content">
+                <h3><%= listing.title %></h3>
+                <p class="listing-location">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <%= listing.location %>, <%= listing.country %>
+                </p>
+                <div class="listing-rating">
+                  <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <span class="rating-text">4.8 (24 reviews)</span>
+                </div>
+                <div class="listing-footer">
+                  <div class="listing-price">
+                    <span class="price">$<%= listing.price %></span>
+                    <span class="period">/ night</span>
+                  </div>
+                  <a href="/listings/<%= listing._id %>" class="view-btn">View Details</a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="no-listings">
+            <i class="fas fa-home"></i>
+            <h3>No listings available</h3>
+            <p>Check back later for amazing accommodations!</p>
+          </div>
+        <% } %>
+      </div>
+      <div class="section-footer">
+        <a href="/listings" class="btn-primary">View All Listings</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Start Your Journey?</h2>
+        <p>Join thousands of travelers who have found their perfect stay with us</p>
+        <div class="cta-buttons">
+          <a href="/listings" class="btn-primary">Explore Listings</a>
+          <a href="/signup" class="btn-secondary">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  /* Global Variables */
+  :root {
+    --primary-color: #1e3a8a;
+    --primary-dark: #1e40af;
+    --primary-light: #3b82f6;
+    --secondary-color: #0f172a;
+    --accent-color: #06b6d4;
+    --text-light: #f8fafc;
+    --text-dark: #1e293b;
+    --bg-dark: #0f172a;
+    --bg-light: #f1f5f9;
+    --border-color: #334155;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --shadow-dark: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .home-container {
+    min-height: 100vh;
+    background: var(--bg-dark);
+    color: var(--text-light);
+  }
+
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 50%, var(--secondary-color) 100%);
+    z-index: 1;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    max-width: 800px;
+    padding: 0 20px;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, #ffffff, #e2e8f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 40px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    animation: fadeInUp 1s ease-out 0.2s both;
+  }
+
+  .hero-search {
+    animation: fadeInUp 1s ease-out 0.4s both;
+  }
+
+  .search-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .search-input-group {
+    position: relative;
+    flex: 1;
+  }
+
+  .search-input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    z-index: 1;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-dark);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+
+  .search-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-btn:hover {
+    background: #0891b2;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-dark);
+  }
+
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  /* Section Headers */
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-light);
+  }
+
+  .section-header p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+  }
+
+  /* Features Section */
+  .features-section {
+    padding: 80px 0;
+    background: var(--secondary-color);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+  }
+
+  .feature-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-dark);
+  }
+
+  .feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.5rem;
+    color: white;
+  }
+
+  .feature-card h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-light);
+  }
+
+  .feature-card p {
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  /* Destinations Section */
+  .destinations-section {
+    padding: 80px 0;
+    background: var(--bg-dark);
+  }
+
+  .destinations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+  }
+
+  .destination-card {
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    height: 250px;
+    transition: all 0.3s ease;
+  }
+
+  .destination-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-dark);
+  }
+
+  .destination-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .destination-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .destination-card:hover .destination-image img {
+    transform: scale(1.1);
+  }
+
+  .destination-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 25px 20px 20px;
+    color: white;
+  }
+
+  .destination-overlay h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .destination-overlay p {
+    color: #cbd5e1;
+  }
+
+  /* Listings Section */
+  .listings-section {
+    padding: 80px 0;
+    background: var(--secondary-color);
+  }
+
+  .listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+  }
+
+  .listing-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .listing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-dark);
+  }
+
+  .listing-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .listing-card:hover .listing-image img {
+    transform: scale(1.05);
+  }
+
+  .listing-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--accent-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .listing-content {
+    padding: 20px;
+  }
+
+  .listing-content h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-light);
+  }
+
+  .listing-location {
+    color: #94a3b8;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .listing-rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .stars {
+    color: #fbbf24;
+  }
+
+  .rating-text {
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  .listing-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .listing-price {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent-color);
+  }
+
+  .period {
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  .view-btn {
+    background: var(--primary-light);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .view-btn:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+  }
+
+  .no-listings {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+  }
+
+  .no-listings i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  .no-listings h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--text-light);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    text-align: center;
+  }
+
+  .cta-content h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-light);
+  }
+
+  .cta-content p {
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    margin-bottom: 30px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent-color);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-primary:hover {
+    background: #0891b2;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-dark);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-light);
+    padding: 15px 30px;
+    border: 2px solid var(--text-light);
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-secondary:hover {
+    background: var(--text-light);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+
+  .section-footer {
+    text-align: center;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 10px;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+    }
+
+    .search-container {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .search-input-group {
+      width: 100%;
+    }
+
+    .search-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .features-grid,
+    .destinations-grid,
+    .listings-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .feature-card,
+    .destination-card,
+    .listing-card {
+      margin: 0 5px;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      max-width: 300px;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 8px;
+    }
+
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .features-grid,
+    .destinations-grid,
+    .listings-grid {
+      gap: 15px;
+    }
+
+    .feature-card,
+    .destination-card,
+    .listing-card {
+      margin: 0 2px;
+    }
+
+    .feature-card {
+      padding: 20px 15px;
+    }
+
+    .listing-content {
+      padding: 15px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth scrolling to anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Add animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all cards for animation
+    document.querySelectorAll('.feature-card, .destination-card, .listing-card').forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(card);
+    });
+  });
+</script>

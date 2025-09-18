@@ -1,0 +1,620 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  .user-container {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg-dark);
+  }
+
+  /* Hide footer in dashboard */
+  footer {
+    display: none !important;
+  }
+
+  /* Sidebar Styles */
+  .user-sidebar {
+    width: 280px;
+    background: var(--primary-color);
+    padding: 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  .sidebar-header {
+    padding: 30px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-color);
+    object-fit: cover;
+  }
+
+  .user-info h4 {
+    color: var(--text-light);
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .user-info p {
+    color: #94a3b8;
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+  }
+
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar-menu li {
+    margin: 0;
+  }
+
+  .sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .sidebar-menu a:hover,
+  .sidebar-menu li.active a {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    border-left-color: var(--accent-color);
+  }
+
+  .sidebar-menu i {
+    width: 20px;
+    text-align: center;
+  }
+
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 30px;
+  }
+
+  .page-header {
+    margin-bottom: 30px;
+  }
+
+  .page-title {
+    color: var(--text-light);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+  }
+
+  .page-subtitle {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  /* Profile Content */
+  .profile-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .profile-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .section-title {
+    color: var(--text-light);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 25px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title i {
+    color: var(--accent-color);
+  }
+
+  .profile-field {
+    margin-bottom: 20px;
+  }
+
+  .field-label {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .field-value {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .field-value.empty {
+    color: #64748b;
+    font-style: italic;
+  }
+
+  .field-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .field-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .field-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .field-input::placeholder {
+    color: #64748b;
+  }
+
+  .btn-edit-field {
+    padding: 12px;
+    background: rgba(6, 182, 212, 0.2);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 8px;
+    color: var(--accent-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+  }
+
+  .btn-edit-field:hover {
+    background: rgba(6, 182, 212, 0.3);
+    color: #60a5fa;
+  }
+
+  .btn-edit-field.saving {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #10b981;
+  }
+
+  .btn-edit-field.error {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+  }
+
+  .user-type-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .user-type-badge.user {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+  }
+
+  .user-type-badge.admin {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+  }
+
+  .profile-actions {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-edit-profile {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-edit-profile:hover {
+    background: linear-gradient(135deg, #0891b2, #3b82f6);
+    transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+  }
+
+  .account-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stat-number {
+    color: var(--accent-color);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .stat-label {
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .user-sidebar {
+      width: 100%;
+      position: relative;
+      height: auto;
+    }
+
+    .main-content {
+      margin-left: 0;
+      padding: 20px;
+    }
+
+    .profile-content {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .account-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .account-stats {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="user-container">
+  <!-- User Sidebar -->
+  <nav class="user-sidebar">
+    <div class="sidebar-header">
+      <div class="user-profile">
+        <img src="https://via.placeholder.com/60" alt="User" class="user-avatar">
+        <div class="user-info">
+          <h4><%= user.username %></h4>
+          <p><%= user.email %></p>
+        </div>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <a href="/user/dashboard">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="/user/bookings">
+          <i class="fas fa-calendar-check"></i>
+          <span>My Bookings</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="/user/profile">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="/logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1 class="page-title">My Profile</h1>
+      <p class="page-subtitle">View and manage your account information</p>
+    </div>
+
+    <div class="profile-content">
+      <!-- Personal Information -->
+      <div class="profile-section">
+        <h2 class="section-title">
+          <i class="fas fa-user-circle"></i>
+          Personal Information
+        </h2>
+
+        <div class="profile-field">
+          <label class="field-label">First Name</label>
+          <div class="field-input-group">
+            <input type="text" id="firstName" class="field-input" value="<%= user.firstName || '' %>" placeholder="Enter first name">
+            <button class="btn-edit-field" onclick="editField('firstName')">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="field-label">Last Name</label>
+          <div class="field-input-group">
+            <input type="text" id="lastName" class="field-input" value="<%= user.lastName || '' %>" placeholder="Enter last name">
+            <button class="btn-edit-field" onclick="editField('lastName')">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="field-label">Username</label>
+          <div class="field-value">
+            <%= user.username %>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="field-label">Email Address</label>
+          <div class="field-input-group">
+            <input type="email" id="email" class="field-input" value="<%= user.email %>" placeholder="Enter email address">
+            <button class="btn-edit-field" onclick="editField('email')">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="field-label">Account Type</label>
+          <div class="field-value">
+            <span class="user-type-badge <%= user.userType %>">
+              <%= user.userType === 'admin' ? 'Administrator' : 'Regular User' %>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Information -->
+      <div class="profile-section">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          Account Information
+        </h2>
+
+        <div class="profile-field">
+          <label class="field-label">User ID</label>
+          <div class="field-value">
+            <%= user._id %>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="field-label">Account Created</label>
+          <div class="field-value">
+            <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown' %>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="field-label">Last Updated</label>
+          <div class="field-value">
+            <%= user.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : 'Unknown' %>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="field-label">Account Status</label>
+          <div class="field-value">
+            <span style="color: #10b981; font-weight: 600;">
+              <i class="fas fa-check-circle"></i> Active
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Account Statistics -->
+    <div class="profile-section" style="margin-top: 30px;">
+      <h2 class="section-title">
+        <i class="fas fa-chart-bar"></i>
+        Account Statistics
+      </h2>
+
+      <div class="account-stats">
+        <div class="stat-item">
+          <div class="stat-number"><%= userBookings || 0 %></div>
+          <div class="stat-label">Total Bookings</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">$<%= totalSpent || 0 %></div>
+          <div class="stat-label">Total Spent</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><%= userReviews || 0 %></div>
+          <div class="stat-label">Reviews Written</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><%= userFavorites || 0 %></div>
+          <div class="stat-label">Favorites</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function editField(fieldName) {
+  const input = document.getElementById(fieldName);
+  const button = input.nextElementSibling;
+  const originalValue = input.value;
+
+  // Validate input
+  if (!input.value.trim()) {
+    showFieldError(button, 'This field is required');
+    return;
+  }
+
+  // Email validation
+  if (fieldName === 'email') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(input.value.trim())) {
+      showFieldError(button, 'Please enter a valid email');
+      return;
+    }
+  }
+
+  // Show saving state
+  button.classList.add('saving');
+  button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  button.disabled = true;
+
+  // Prepare data
+  const data = {
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName: document.getElementById('lastName').value.trim(),
+    email: document.getElementById('email').value.trim()
+  };
+
+  // Make API call
+  fetch('/user/profile/personal', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.success) {
+      showFieldSuccess(button);
+      // Update the input values with the response data
+      if (result.data) {
+        document.getElementById('firstName').value = result.data.firstName;
+        document.getElementById('lastName').value = result.data.lastName;
+        document.getElementById('email').value = result.data.email;
+      }
+    } else {
+      showFieldError(button, result.message || 'Update failed');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showFieldError(button, 'Network error occurred');
+  });
+}
+
+function showFieldSuccess(button) {
+  button.classList.remove('saving', 'error');
+  button.classList.add('success');
+  button.innerHTML = '<i class="fas fa-check"></i>';
+  
+  setTimeout(() => {
+    button.classList.remove('success');
+    button.innerHTML = '<i class="fas fa-edit"></i>';
+    button.disabled = false;
+  }, 2000);
+}
+
+function showFieldError(button, message) {
+  button.classList.remove('saving');
+  button.classList.add('error');
+  button.innerHTML = '<i class="fas fa-times"></i>';
+  
+  // Show error message
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'field-error';
+  errorDiv.textContent = message;
+  errorDiv.style.cssText = `
+    color: #ef4444;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    padding: 5px 10px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 4px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  `;
+  
+  button.parentNode.appendChild(errorDiv);
+  
+  setTimeout(() => {
+    button.classList.remove('error');
+    button.innerHTML = '<i class="fas fa-edit"></i>';
+    button.disabled = false;
+    if (errorDiv.parentNode) {
+      errorDiv.parentNode.removeChild(errorDiv);
+    }
+  }, 3000);
+}
+
+// Add Enter key support for inputs
+document.addEventListener('DOMContentLoaded', function() {
+  const inputs = document.querySelectorAll('.field-input');
+  inputs.forEach(input => {
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const fieldName = this.id;
+        editField(fieldName);
+      }
+    });
+  });
+});
+</script>
