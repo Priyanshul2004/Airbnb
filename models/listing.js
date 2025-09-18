@@ -15,6 +15,9 @@ const listingSchema = new Schema({
   price: Number,
   location: String,
   country: String,
+  bedrooms: Number,
+  bathrooms: Number,
+  maxGuests: Number,
   reviews: [
     {
       type: Schema.Types.ObjectId,
@@ -25,6 +28,8 @@ const listingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+}, {
+  timestamps: true // This adds createdAt and updatedAt fields
 });
 
 listingSchema.post("findOneAndDelete", async (listing)=>{

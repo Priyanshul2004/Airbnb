@@ -1,5 +1,6 @@
 const Listing  = require("./models/listing");
 const Review  = require("./models/review");
+const Admin = require("./models/admin");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 
@@ -62,4 +63,51 @@ module.exports.isReviewAuthor = async (req, res, next)=>{
     }
 
     next();
+};
+
+// Admin Authentication Middleware
+module.exports.isAdminLoggedIn = (req, res, next) => {
+  console.log('🔍 === ADMIN MIDDLEWARE CHECK ===');
+  console.log('👤 User authenticated:', req.isAuthenticated());
+  console.log('👤 User data:', req.user ? {
+    id: req.user._id,
+    email: req.user.email,
+    userType: req.user.userType,
+    role: req.user.role
+  } : 'No user');
+  
+  if (!req.isAuthenticated()) {
+    console.log('❌ User not authenticated, redirecting to login');
+    req.session.redirectUrl = req.originalUrl;
+    req.flash("error", "You must be logged in as admin to access this page!");
+    return res.redirect("/login");
+  }
+  
+  // Check if the authenticated user is an admin
+  if (!req.user || req.user.userType !== 'admin') {
+    console.log('❌ User is not admin, redirecting to login');
+    req.flash("error", "You don't have admin privileges!");
+    return res.redirect("/login");
+  }
+  
+  console.log('✅ Admin middleware passed');
+  next();
+};
+
+module.exports.isAdmin = (req, res, next) => {
+  if (!req.user || req.user.userType !== 'admin') {
+    req.flash("error", "You don't have admin privileges!");
+    return res.redirect("/login");
+  }
+  next();
+};
+
+// Prevent admins from accessing user-specific pages
+module.exports.isNotAdmin = (req, res, next) => {
+  if (req.user && req.user.userType === 'admin') {
+    console.log('🚫 Admin trying to access user page, redirecting to admin dashboard');
+    req.flash("info", "Admins should use the admin panel for management tasks.");
+    return res.redirect("/admin/dashboard");
+  }
+  next();
 };

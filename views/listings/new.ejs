@@ -5,8 +5,7 @@
     <h3>Create a New Listing</h3>
     <form method="POST" action="/listings"
      novalidate 
-    class="needs-validation" 
-    enctype="multipart/form-data">
+    class="needs-validation">
       <div class="mb-3">
         <lable for="title" class="form-label">Title</lable>
         <input name="listing[title]" placeholder="Add a catchy Title" type="text" class="form-control" required />
@@ -24,13 +23,15 @@
       
 
       <div class="mb-3">
-        <lable for="image" class="form-label" >Upload Listing Image</lable>
+        <lable for="image" class="form-label" >Image URL</lable>
         <input
-        name="listing[image]"
-        type="file"
+        name="listing[image][url]"
+        type="url"
+        placeholder="https://example.com/image.jpg"
         class="form-control"
+        required
       />
-      required
+      <div class="invalid-feedback"> Please enter a valid image URL!</div>
       </div>
       <div class="row">
         <div class="mb-3 col-md-4">

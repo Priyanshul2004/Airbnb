@@ -1,28 +1,644 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-    <h1 class="col-6 offset-3">Signup on Wanderlust</h1>
-    <div class="col-6 offset-3">
-        <form action="/signup" method="post">
-            <div class="mb-3">
-                <lable for="username" class="form-label">username</lable>
-                <input name="username" id="username" type="text" class="form-control" required />
-                <div class="valid-feedback"> looks good!</div>
-              </div>
+<style>
+  .signup-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    padding: 20px;
+  }
 
-              <div class="mb-3">
-                <lable for="email" class="form-label">Email</lable>
-                <input name="email" id="email" type="email" class="form-control" required />
-              </div>
+  .signup-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  }
 
-              <div class="mb-3">
-                <lable for="password" class="form-label">Password</lable>
-                <input name="password" id="password" type="password" class="form-control" required />
-              </div>
+  .signup-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
 
-              <button class="btn btn-success">SignUp</button>
+  .signup-logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-        </form>
+  .signup-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
 
-     </div>
- </div>
+  .signup-subtitle {
+    color: #94a3b8;
+    font-size: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-light);
+    font-size: 0.95rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+  }
+
+  .form-control::placeholder {
+    color: #64748b;
+  }
+
+  select.form-control {
+    cursor: pointer;
+  }
+
+  select.form-control option {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    padding: 10px;
+  }
+
+  .password-strength {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+
+  .password-requirements {
+    margin-top: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-color);
+  }
+
+  .password-requirements h6 {
+    color: var(--text-light);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+
+  .password-requirements ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #94a3b8;
+    font-size: 0.85rem;
+  }
+
+  .password-requirements li {
+    margin-bottom: 4px;
+  }
+
+  .btn-signup {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  .btn-signup:hover {
+    background: linear-gradient(135deg, #0891b2, #3b82f6);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+  }
+
+  .btn-signup:active {
+    transform: translateY(0);
+  }
+
+  .login-link {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.95rem;
+  }
+
+  .login-link a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .login-link a:hover {
+    color: var(--primary-light);
+    text-decoration: underline;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .divider span {
+    padding: 0 15px;
+  }
+
+  .social-signup {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .btn-social {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    text-decoration: none;
+    text-align: center;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-social:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    text-decoration: none;
+  }
+
+  .error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  .success-message {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #86efac;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .signup-container {
+      padding: 15px;
+    }
+
+    .signup-card {
+      padding: 30px 25px;
+      max-width: 100%;
+    }
+
+    .signup-logo {
+      font-size: 2rem;
+    }
+
+    .signup-title {
+      font-size: 1.5rem;
+    }
+
+    .social-signup {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .signup-card {
+      padding: 25px 20px;
+    }
+
+    .form-control {
+      padding: 12px 15px;
+    }
+
+    .btn-signup {
+      padding: 12px;
+    }
+  }
+</style>
+
+<div class="signup-container">
+  <div class="signup-card">
+    <div class="signup-header">
+      <div class="signup-logo">🏠 UrbanNest</div>
+      <h1 class="signup-title">Create Account</h1>
+      <p class="signup-subtitle">Join thousands of travelers worldwide</p>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (typeof error !== 'undefined' && error.length > 0) { %>
+      <div class="error-message">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <% if (typeof success !== 'undefined' && success.length > 0) { %>
+      <div class="success-message">
+        <%= success %>
+      </div>
+    <% } %>
+
+    <form action="/signup" method="post" id="signupForm">
+      <div class="form-group">
+        <label for="userType" class="form-label">Account Type</label>
+        <select id="userType" name="userType" class="form-control" required>
+          <option value="">Select account type</option>
+          <option value="user">Regular User</option>
+          <option value="admin">Administrator</option>
+        </select>
+        <div class="password-strength">Choose your account type - Admin accounts have additional privileges</div>
+      </div>
+
+      <div class="form-group">
+        <label for="role" class="form-label">Role</label>
+        <select id="role" name="role" class="form-control" required>
+          <option value="">Select your role</option>
+          <option value="user">Regular User</option>
+          <option value="admin">Admin</option>
+          <option value="super_admin">Super Admin</option>
+          <option value="moderator">Moderator</option>
+        </select>
+        <div class="password-strength">Select your specific role within the account type</div>
+      </div>
+
+      <div class="form-group">
+        <label for="firstName" class="form-label">First Name</label>
+        <input 
+          type="text" 
+          id="firstName" 
+          name="firstName" 
+          class="form-control" 
+          placeholder="Enter your first name"
+          maxlength="50"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="lastName" class="form-label">Last Name</label>
+        <input 
+          type="text" 
+          id="lastName" 
+          name="lastName" 
+          class="form-control" 
+          placeholder="Enter your last name"
+          maxlength="50"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="username" class="form-label">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          class="form-control" 
+          placeholder="Enter your username"
+          required
+          minlength="3"
+          maxlength="20"
+        >
+        <div class="password-strength">3-20 characters, letters and numbers only</div>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          placeholder="Enter your email"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          placeholder="Create a strong password"
+          required
+          minlength="6"
+        >
+        <div class="password-requirements">
+          <h6>Password Requirements:</h6>
+          <ul>
+            <li>At least 6 characters long</li>
+            <li>Mix of letters and numbers</li>
+            <li>No spaces or special characters</li>
+          </ul>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-signup">
+        Create Account
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <div class="social-signup">
+      <a href="#" class="btn-social">
+        <span>📧</span>
+        <span>Google</span>
+      </a>
+      <a href="#" class="btn-social">
+        <span>📘</span>
+        <span>Facebook</span>
+      </a>
+    </div>
+
+    <div class="login-link">
+      Already have an account? 
+      <a href="/login">Sign in here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎯 === UNIFIED SIGNUP PAGE LOADED ===');
+  console.log('📅 Page load timestamp:', new Date().toISOString());
+  console.log('🌐 Current URL:', window.location.href);
+  
+  const form = document.getElementById('signupForm');
+  const userTypeInput = document.getElementById('userType');
+  const roleInput = document.getElementById('role');
+  const firstNameInput = document.getElementById('firstName');
+  const lastNameInput = document.getElementById('lastName');
+  const usernameInput = document.getElementById('username');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+
+  console.log('📋 Form elements found:');
+  console.log('   Form:', form ? '✅ Found' : '❌ Not found');
+  console.log('   UserType Input:', userTypeInput ? '✅ Found' : '❌ Not found');
+  console.log('   Role Input:', roleInput ? '✅ Found' : '❌ Not found');
+  console.log('   FirstName Input:', firstNameInput ? '✅ Found' : '❌ Not found');
+  console.log('   LastName Input:', lastNameInput ? '✅ Found' : '❌ Not found');
+  console.log('   Username Input:', usernameInput ? '✅ Found' : '❌ Not found');
+  console.log('   Email Input:', emailInput ? '✅ Found' : '❌ Not found');
+  console.log('   Password Input:', passwordInput ? '✅ Found' : '❌ Not found');
+
+  // User Type validation
+  if (userTypeInput) {
+    userTypeInput.addEventListener('change', function() {
+      if (this.value) {
+        this.style.borderColor = '#22c55e';
+        console.log('✅ UserType selected:', this.value);
+      } else {
+        this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+      }
+    });
+  }
+
+  // Role validation
+  if (roleInput) {
+    roleInput.addEventListener('change', function() {
+      if (this.value) {
+        this.style.borderColor = '#22c55e';
+        console.log('✅ Role selected:', this.value);
+      } else {
+        this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+      }
+    });
+  }
+
+  // First Name validation
+  firstNameInput.addEventListener('input', function() {
+    const value = this.value;
+    const isValid = /^[a-zA-Z\s]{0,50}$/.test(value);
+    
+    if (value.length > 0) {
+      if (isValid) {
+        this.style.borderColor = '#22c55e';
+      } else {
+        this.style.borderColor = '#ef4444';
+      }
+    } else {
+      this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+    }
+  });
+
+  // Last Name validation
+  lastNameInput.addEventListener('input', function() {
+    const value = this.value;
+    const isValid = /^[a-zA-Z\s]{0,50}$/.test(value);
+    
+    if (value.length > 0) {
+      if (isValid) {
+        this.style.borderColor = '#22c55e';
+      } else {
+        this.style.borderColor = '#ef4444';
+      }
+    } else {
+      this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+    }
+  });
+
+  // Username validation
+  usernameInput.addEventListener('input', function() {
+    const value = this.value;
+    const isValid = /^[a-zA-Z0-9]{3,20}$/.test(value);
+    
+    if (value.length > 0) {
+      if (isValid) {
+        this.style.borderColor = '#22c55e';
+      } else {
+        this.style.borderColor = '#ef4444';
+      }
+    } else {
+      this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+    }
+  });
+
+  // Email validation
+  emailInput.addEventListener('input', function() {
+    const value = this.value;
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    
+    if (value.length > 0) {
+      if (isValid) {
+        this.style.borderColor = '#22c55e';
+      } else {
+        this.style.borderColor = '#ef4444';
+      }
+    } else {
+      this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+    }
+  });
+
+  // Password validation
+  passwordInput.addEventListener('input', function() {
+    const value = this.value;
+    const isValid = value.length >= 6 && !/\s/.test(value);
+    
+    if (value.length > 0) {
+      if (isValid) {
+        this.style.borderColor = '#22c55e';
+      } else {
+        this.style.borderColor = '#ef4444';
+      }
+    } else {
+      this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+    }
+  });
+
+  // Form submission validation
+  form.addEventListener('submit', function(e) {
+    console.log('🔍 === SIGNUP FORM SUBMISSION ===');
+    
+    const userType = userTypeInput ? userTypeInput.value : '';
+    const role = roleInput ? roleInput.value : '';
+    const firstName = firstNameInput ? firstNameInput.value : '';
+    const lastName = lastNameInput ? lastNameInput.value : '';
+    const username = usernameInput ? usernameInput.value : '';
+    const email = emailInput ? emailInput.value : '';
+    const password = passwordInput ? passwordInput.value : '';
+
+    console.log('📋 Form data:', {
+      userType: userType,
+      role: role,
+      firstName: firstName,
+      lastName: lastName,
+      username: username,
+      email: email,
+      password: password ? '[HIDDEN]' : 'undefined'
+    });
+
+    // User Type validation
+    if (!userType) {
+      e.preventDefault();
+      console.error('❌ UserType validation failed');
+      alert('Please select an account type.');
+      if (userTypeInput) userTypeInput.focus();
+      return;
+    }
+
+    // Role validation
+    if (!role) {
+      e.preventDefault();
+      console.error('❌ Role validation failed');
+      alert('Please select your role.');
+      if (roleInput) roleInput.focus();
+      return;
+    }
+
+    // First Name validation (optional but if provided, should be valid)
+    if (firstName && !/^[a-zA-Z\s]{1,50}$/.test(firstName)) {
+      e.preventDefault();
+      alert('First name can only contain letters and spaces (max 50 characters).');
+      firstNameInput.focus();
+      return;
+    }
+
+    // Last Name validation (optional but if provided, should be valid)
+    if (lastName && !/^[a-zA-Z\s]{1,50}$/.test(lastName)) {
+      e.preventDefault();
+      alert('Last name can only contain letters and spaces (max 50 characters).');
+      lastNameInput.focus();
+      return;
+    }
+
+    // Username validation
+    if (!/^[a-zA-Z0-9]{3,20}$/.test(username)) {
+      e.preventDefault();
+      alert('Username must be 3-20 characters long and contain only letters and numbers.');
+      usernameInput.focus();
+      return;
+    }
+
+    // Email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      e.preventDefault();
+      alert('Please enter a valid email address.');
+      emailInput.focus();
+      return;
+    }
+
+    // Password validation
+    if (password.length < 6 || /\s/.test(password)) {
+      e.preventDefault();
+      alert('Password must be at least 6 characters long and contain no spaces.');
+      passwordInput.focus();
+      return;
+    }
+  });
+
+  // Add loading state to submit button
+  form.addEventListener('submit', function() {
+    const submitBtn = document.querySelector('.btn-signup');
+    if (submitBtn) {
+      submitBtn.innerHTML = 'Creating Account...';
+      submitBtn.disabled = true;
+    }
+    console.log('✅ Form validation passed, submitting...');
+  });
+
+  console.log('🎉 === UNIFIED SIGNUP PAGE INITIALIZED ===');
+});
+</script>

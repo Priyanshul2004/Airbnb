@@ -1,0 +1,538 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="admin-login-container">
+  <div class="admin-login-card">
+    <div class="login-header">
+      <div class="admin-logo">
+        <i class="fas fa-crown"></i>
+        <h2>Admin Panel</h2>
+      </div>
+      <p>Sign in to access the admin dashboard</p>
+      <div class="debug-indicator">
+        <i class="fas fa-bug"></i>
+        <span>Debug Mode Active - Check Browser Console</span>
+      </div>
+      <div class="unified-login-notice">
+        <i class="fas fa-info-circle"></i>
+        <span>This form now uses the unified login system</span>
+      </div>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (typeof error !== 'undefined' && error.length > 0) { %>
+      <div class="alert alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <%= error %>
+      </div>
+    <% } %>
+    
+    <% if (typeof success !== 'undefined' && success.length > 0) { %>
+      <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
+        <%= success %>
+      </div>
+    <% } %>
+
+    <!-- API Response Messages -->
+    <div id="api-message" class="alert" style="display: none;">
+      <i class="fas fa-info-circle"></i>
+      <span id="api-message-text"></span>
+    </div>
+
+    <form action="/login" method="post" id="adminLoginForm" class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="Enter your email"
+            required
+            value="admin@airbnb.com"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <div class="input-group">
+          <i class="fas fa-user-tag"></i>
+          <select id="role" name="role" required>
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="super_admin" selected>Super Admin</option>
+            <option value="moderator">Moderator</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="Enter your password"
+            required
+            value="admin123"
+          >
+        </div>
+      </div>
+
+      <button type="submit" class="login-btn" id="loginBtn">
+        <i class="fas fa-sign-in-alt"></i>
+        <span id="btnText">Sign In</span>
+        <div id="loadingSpinner" class="spinner" style="display: none;">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Regular user? <a href="/login">Sign in here</a></p>
+      <p><a href="/">← Back to Home</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        console.log('🎯 === ADMIN LOGIN PAGE LOADED ===');
+        console.log('📅 Page load timestamp:', new Date().toISOString());
+        console.log('🌐 Current URL:', window.location.href);
+        console.log('🔍 User Agent:', navigator.userAgent);
+        console.log('🌍 Language:', navigator.language);
+        console.log('📱 Online Status:', navigator.onLine ? 'Online' : 'Offline');
+        console.log('🍪 Cookies Enabled:', navigator.cookieEnabled);
+        console.log('📏 Screen Resolution:', `${screen.width}x${screen.height}`);
+        console.log('🖥️ Viewport Size:', `${window.innerWidth}x${window.innerHeight}`);
+        
+        const form = document.getElementById('adminLoginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const btnText = document.getElementById('btnText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const apiMessage = document.getElementById('api-message');
+        const apiMessageText = document.getElementById('api-message-text');
+        
+        console.log('📋 Form elements found:');
+        console.log('   Form:', form ? '✅ Found' : '❌ Not found');
+        console.log('   Login Button:', loginBtn ? '✅ Found' : '❌ Not found');
+        console.log('   Button Text:', btnText ? '✅ Found' : '❌ Not found');
+        console.log('   Loading Spinner:', loadingSpinner ? '✅ Found' : '❌ Not found');
+        console.log('   API Message:', apiMessage ? '✅ Found' : '❌ Not found');
+
+        // Check for missing critical elements
+        if (!form) {
+            console.error('❌ CRITICAL ERROR: Login form not found!');
+            return;
+        }
+        if (!loginBtn) {
+            console.error('❌ CRITICAL ERROR: Login button not found!');
+            return;
+        }
+    
+    // Log initial form values
+    if (form) {
+        console.log('📝 Initial form values:');
+        const formData = new FormData(form);
+        for (let [key, value] of formData.entries()) {
+            if (key === 'password') {
+                console.log(`   ${key}: [HIDDEN]`);
+            } else {
+                console.log(`   ${key}: ${value}`);
+            }
+        }
+    }
+
+    form.addEventListener('submit', function(e) {
+        console.log('🔍 === ADMIN LOGIN FORM SUBMISSION ===');
+        console.log('📝 Form submission triggered');
+        console.log('🌐 Current URL:', window.location.href);
+        console.log('📅 Timestamp:', new Date().toISOString());
+        
+        // Get form data
+        const formData = new FormData(form);
+        const email = formData.get('email');
+        const role = formData.get('role');
+        const password = formData.get('password');
+
+        console.log('📋 Form data collected:', {
+            email: email,
+            role: role,
+            password: password ? '[HIDDEN]' : 'undefined'
+        });
+
+        // Validate form data
+        if (!email) {
+            e.preventDefault();
+            console.error('❌ Email validation failed');
+            showMessage('error', 'Email is required');
+            return;
+        }
+
+        if (!role) {
+            e.preventDefault();
+            console.error('❌ Role validation failed');
+            showMessage('error', 'Role is required');
+            return;
+        }
+
+        if (!password) {
+            e.preventDefault();
+            console.error('❌ Password validation failed');
+            showMessage('error', 'Password is required');
+            return;
+        }
+
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            e.preventDefault();
+            console.error('❌ Email format validation failed');
+            showMessage('error', 'Invalid email format');
+            return;
+        }
+
+        console.log('✅ Form validation passed, submitting to unified login...');
+        
+        // Show loading state
+        setLoadingState(true);
+        hideMessage();
+    });
+
+    function setLoadingState(loading) {
+        try {
+            console.log(`🔄 Setting loading state: ${loading ? 'ON' : 'OFF'}`);
+            if (loading) {
+                if (loginBtn) loginBtn.disabled = true;
+                if (btnText) btnText.style.display = 'none';
+                if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
+                console.log('⏳ Loading state activated');
+            } else {
+                if (loginBtn) loginBtn.disabled = false;
+                if (btnText) btnText.style.display = 'inline';
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
+                console.log('✅ Loading state deactivated');
+            }
+        } catch (error) {
+            console.error('❌ Error setting loading state:', error);
+        }
+    }
+
+    function showMessage(type, message) {
+        try {
+            console.log(`💬 Showing ${type} message:`, message);
+            if (apiMessage) apiMessage.className = `alert alert-${type}`;
+            if (apiMessageText) apiMessageText.textContent = message;
+            if (apiMessage) apiMessage.style.display = 'flex';
+            console.log(`📢 Message displayed with class: alert-${type}`);
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                console.log('⏰ Auto-hiding message after 5 seconds');
+                hideMessage();
+            }, 5000);
+        } catch (error) {
+            console.error('❌ Error showing message:', error);
+        }
+    }
+
+    function hideMessage() {
+        try {
+            console.log('🙈 Hiding message');
+            if (apiMessage) apiMessage.style.display = 'none';
+        } catch (error) {
+            console.error('❌ Error hiding message:', error);
+        }
+    }
+    
+        console.log('🎉 === ADMIN LOGIN PAGE FULLY INITIALIZED ===');
+        console.log('🚀 Ready to handle admin login!');
+    } catch (error) {
+        console.error('💥 CRITICAL ERROR during page initialization:', error);
+        console.error('📋 Error details:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack,
+            timestamp: new Date().toISOString()
+        });
+        
+        // Show error message to user if possible
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 10000;
+            max-width: 300px;
+        `;
+        errorDiv.innerHTML = `
+            <strong>Page Error</strong><br>
+            There was an error loading the login page. Please refresh the page.
+        `;
+        document.body.appendChild(errorDiv);
+        
+        // Auto remove after 10 seconds
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.parentNode.removeChild(errorDiv);
+            }
+        }, 10000);
+    }
+});
+</script>
+
+<style>
+  .admin-login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    padding: 20px;
+  }
+
+  .admin-login-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .admin-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .admin-logo i {
+    font-size: 2rem;
+    color: #f59e0b;
+  }
+
+  .admin-logo h2 {
+    color: var(--text-light);
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .login-header p {
+    color: #94a3b8;
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .debug-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 8px 16px;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 8px;
+    color: #22c55e;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .debug-indicator i {
+    color: #22c55e;
+  }
+
+  .unified-login-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 8px;
+    color: #60a5fa;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .unified-login-notice i {
+    color: #60a5fa;
+  }
+
+  .login-form {
+    margin-bottom: 30px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-light);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-group i {
+    position: absolute;
+    left: 15px;
+    color: #94a3b8;
+    z-index: 1;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .input-group input:focus {
+    outline: none;
+    border-color: #f59e0b;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .input-group input::placeholder {
+    color: #64748b;
+  }
+
+  .input-group select {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .input-group select:focus {
+    outline: none;
+    border-color: #f59e0b;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+
+  .login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+  }
+
+  .login-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+  }
+
+  .login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .spinner {
+    display: none;
+  }
+
+  .login-footer {
+    text-align: center;
+  }
+
+  .login-footer p {
+    color: #94a3b8;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+
+  .login-footer a {
+    color: #f59e0b;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .login-footer a:hover {
+    color: #d97706;
+  }
+
+  /* Alert Messages */
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+  }
+
+  .alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+  }
+
+  @media (max-width: 480px) {
+    .admin-login-card {
+      padding: 30px 20px;
+    }
+  }
+</style>
